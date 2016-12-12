@@ -1,6 +1,6 @@
 {
   "name": "jquery.cue.js",
-  "version": "0.161212.1",
+  "version": "0.161213.1",
   "description": "simple cueing script",
   "main": "Gruntfile.coffee",
   "scripts": {

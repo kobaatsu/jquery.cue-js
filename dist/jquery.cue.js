@@ -1,5 +1,5 @@
 (function(jQuery) {
-  var $, STYLE, TARGET_ELEMENT_SCROLL, _config, _css, _indexStyle, createNameRandom;
+  var $, $WINDOW, STYLE, TARGET_ELEMENT_SCROLL, _config, _css, _indexStyle, createNameRandom;
   $ = jQuery;
 
   /* 初期設定(起動時に上書き可能) */
@@ -17,6 +17,7 @@
   document.head.appendChild(STYLE);
   _css = STYLE.sheet;
   _indexStyle = 0;
+  $WINDOW = $(window);
   TARGET_ELEMENT_SCROLL = navigator.userAgent.indexOf('WebKit') < 0 ? document.documentElement : document.body;
   createNameRandom = function() {
     var c, l, result;
@@ -29,9 +30,11 @@
     return result;
   };
   $.fn.cue = function(config) {
+    var _cueing;
     _config = $.extend(_config, config);
+    _cueing = [];
     this.each(function() {
-      var $this, cssResult, delay, duration, easing, nameClass, property, threshold, timer, type;
+      var $this, cssResult, duration, easing, itemCueing, nameClass, property, threshold, timer, type;
       $this = $(this);
       nameClass = "cue-" + (createNameRandom());
       $this.addClass(nameClass);
@@ -45,25 +48,37 @@
       _css.insertRule("." + nameClass + "." + _config.classNameCued + "{" + cssResult + "}", _indexStyle);
       _indexStyle++;
       if (type === 'timing') {
-        delay = $this.data('cue-value') || _config.delay;
-        setTimeout(function() {
-          $this.addClass(_config.classNameCued);
-        }, delay);
+        itemCueing = {
+          $target: $this,
+          delay: $this.data('cue-value') || _config.delay
+        };
+        _cueing.push(itemCueing);
       } else if ('scroll') {
         threshold = $this.data('cue-value') || _config.scroll;
         timer = false;
-        $(window).on("scroll." + nameClass, function() {
+        $WINDOW.on("scroll." + nameClass, function() {
           if (timer) {
             clearTimeout(timer);
           }
           timer = setTimeout(function() {
             if (TARGET_ELEMENT_SCROLL.scrollTop > threshold) {
               $this.addClass(_config.classNameCued);
-              $(window).off("." + nameClass);
+              $WINDOW.off("." + nameClass);
             }
           }, 10);
         });
       }
     });
+    if (_cueing.length > 0) {
+      $WINDOW.on('load', function() {
+        $.each(_cueing, function() {
+          setTimeout((function(_this) {
+            return function() {
+              _this.$target.addClass(_config.classNameCued);
+            };
+          })(this), this.delay);
+        });
+      });
+    }
   };
 })(jQuery);

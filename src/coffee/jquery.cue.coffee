@@ -19,6 +19,7 @@ do (jQuery) ->
   _css = STYLE.sheet
   _indexStyle = 0
 
+  $WINDOW = $ window
   TARGET_ELEMENT_SCROLL = if (navigator.userAgent.indexOf('WebKit') < 0) then document.documentElement else document.body
 
   # ランダムな名前をつける
@@ -34,6 +35,8 @@ do (jQuery) ->
 
     # 起動時のconfigを継承
     _config = $.extend _config, config
+
+    _cueing = []
 
     @each ->
       $this = $ @
@@ -57,24 +60,34 @@ do (jQuery) ->
       _indexStyle++
 
       if type is 'timing'
-        delay = $this.data('cue-value') or _config.delay
-        setTimeout ->
-          $this.addClass _config.classNameCued
-          return
-        , delay
+        itemCueing =
+          $target: $this
+          delay: $this.data('cue-value') or _config.delay
+        _cueing.push itemCueing
       else if 'scroll'
         threshold = $this.data('cue-value') or _config.scroll
         timer = false
-        $(window).on "scroll.#{nameClass}", ->
+        $WINDOW.on "scroll.#{nameClass}", ->
           clearTimeout timer if timer
           timer = setTimeout ->
             if TARGET_ELEMENT_SCROLL.scrollTop > threshold
               $this.addClass _config.classNameCued
               # unbind
-              $(window).off ".#{nameClass}"
+              $WINDOW.off ".#{nameClass}"
               return
           , 10
           return
       return
+
+    if _cueing.length > 0
+      $WINDOW.on 'load', ->
+        $.each _cueing, ->
+          setTimeout =>
+            @$target.addClass _config.classNameCued
+            return
+          , @delay
+          return
+        return
+
     return
   return
