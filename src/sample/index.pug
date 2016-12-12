@@ -7,17 +7,35 @@ html
   body
     h1 sample
 
+    code
+      | $('.cue').cue();
+
+
     #sample1.cue(
     data-cue-type='timing'
-    date-cue-value='3000'
-    data-cue-result='opacity:0'
+    data-cue-value='3000'
+    data-cue-result='opacity:0;color:green;'
     data-cue-duration=".5s"
     data-cue-easing='linear'
     )
       | 3秒後に透明になる
 
-    code
-      | $('.cue').cue()
+    #sample2.cue(
+    data-cue-type='timing'
+    data-cue-value='5000'
+    data-cue-result='transform:translateX(100px);'
+    data-cue-duration="1s"
+    data-cue-easing='ease-in'
+    )
+      | 5秒後に右にずれる
+
+    #sample3.cue(
+    data-cue-type='scroll'
+    data-cue-value='50'
+    data-cue-result='color:red;'
+    style="margin-top:200px;margin-bottom:1000px;"
+    )
+      | 50pxスクロールすると赤くなる
 
     script(src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
     script(src="../jquery.cue.js")

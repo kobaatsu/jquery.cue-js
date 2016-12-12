@@ -4,8 +4,10 @@
     <title>jquery.cue.js sample</title>
   </head>
   <body>
-    <h1>sample</h1>
-    <div class="cue" id="sample1" data-cue-type="timing" date-cue-value="3000" data-cue-result="opacity:0" data-cue-duration=".5s" data-cue-easing="linear">3秒後に透明になる</div><code>$('.cue').cue()</code>
+    <h1>sample</h1><code>$('.cue').cue();</code>
+    <div class="cue" id="sample1" data-cue-type="timing" data-cue-value="3000" data-cue-result="opacity:0;color:green;" data-cue-duration=".5s" data-cue-easing="linear">3秒後に透明になる</div>
+    <div class="cue" id="sample2" data-cue-type="timing" data-cue-value="5000" data-cue-result="transform:translateX(100px);" data-cue-duration="1s" data-cue-easing="ease-in">5秒後に右にずれる</div>
+    <div class="cue" id="sample3" data-cue-type="scroll" data-cue-value="50" data-cue-result="color:red;" style="margin-top:200px;margin-bottom:1000px">50pxスクロールすると赤くなる</div>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="../jquery.cue.js"></script>
     <script>$('.cue').cue()</script>
