@@ -1,0 +1,33 @@
+{
+  "name": "jquery.cue.js",
+  "version": "0.161212.1",
+  "description": "simple cueing script",
+  "main": "Gruntfile.coffee",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-coffee": "^1.0.0",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-pug": "^1.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-este-watch": "^0.1.18",
+    "grunt-notify": "^0.4.5",
+    "jstransformer-markdown-it": "^2.0.0",
+    "load-grunt-config": "^0.19.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kobaatsu/jquery.cue.js.git"
+  },
+  "author": "KOBAYASHI atsushi",
+  "license": "MIT",
+  "coffeelintConfig": {
+    "max_line_length": {
+      "level": "error",
+      "value": 9999
+    }
+  }
+}

@@ -1,0 +1,25 @@
+doctype html
+
+html
+  head
+    title jquery.cue.js sample
+
+  body
+    h1 sample
+
+    #sample1.cue(
+    data-cue-type='timing'
+    date-cue-value='3000'
+    data-cue-result='opacity:0'
+    data-cue-duration=".5s"
+    data-cue-easing='linear'
+    )
+      | 3秒後に透明になる
+
+    code
+      | $('.cue').cue()
+
+    script(src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js")
+    script(src="../jquery.cue.js")
+    script.
+      $('.cue').cue()
