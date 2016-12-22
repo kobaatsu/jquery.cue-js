@@ -1,5 +1,5 @@
 (function(jQuery) {
-  var $, $WINDOW, STYLE, TARGET_ELEMENT_SCROLL, _config, _css, _indexStyle, createNameRandom;
+  var $, $WINDOW, STYLE, _config, _css, _indexStyle, createNameRandom;
   $ = jQuery;
 
   /* 初期設定(起動時に上書き可能) */
@@ -18,7 +18,6 @@
   _css = STYLE.sheet;
   _indexStyle = 0;
   $WINDOW = $(window);
-  TARGET_ELEMENT_SCROLL = navigator.userAgent.indexOf('WebKit') < 0 ? document.documentElement : document.body;
   createNameRandom = function() {
     var c, l, result;
     c = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -34,7 +33,7 @@
     _config = $.extend(_config, config);
     _cueing = [];
     this.each(function() {
-      var $this, cssResult, duration, easing, itemCueing, nameClass, property, threshold, timer, type;
+      var $this, cssResult, duration, easing, itemCueing, nameClass, property, targetElementScroll, threshold, timer, type;
       $this = $(this);
       nameClass = "cue-" + (createNameRandom());
       $this.addClass(nameClass);
@@ -43,8 +42,10 @@
       property = $this.data('cue-property') || _config.property;
       duration = $this.data('cue-duration') || _config.duration;
       easing = $this.data('cue-easing') || _config.easing;
-      _css.insertRule("." + nameClass + "{transition: " + property + " " + duration + " " + easing + ";}", _indexStyle);
-      _indexStyle++;
+      if (cssResult !== '') {
+        _css.insertRule("." + nameClass + "{transition: " + property + " " + duration + " " + easing + ";}", _indexStyle);
+        _indexStyle++;
+      }
       _css.insertRule("." + nameClass + "." + _config.classNameCued + "{" + cssResult + "}", _indexStyle);
       _indexStyle++;
       if (type === 'timing') {
@@ -54,6 +55,7 @@
         };
         _cueing.push(itemCueing);
       } else if ('scroll') {
+        targetElementScroll = navigator.userAgent.indexOf('WebKit') < 0 ? document.documentElement : document.body;
         threshold = $this.data('cue-value') || _config.scroll;
         timer = false;
         $WINDOW.on("scroll." + nameClass, function() {
@@ -61,7 +63,7 @@
             clearTimeout(timer);
           }
           timer = setTimeout(function() {
-            if (TARGET_ELEMENT_SCROLL.scrollTop > threshold) {
+            if (targetElementScroll.scrollTop > threshold) {
               $this.addClass(_config.classNameCued);
               $WINDOW.off("." + nameClass);
             }

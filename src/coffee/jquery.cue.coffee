@@ -20,7 +20,6 @@ do (jQuery) ->
   _indexStyle = 0
 
   $WINDOW = $ window
-  TARGET_ELEMENT_SCROLL = if (navigator.userAgent.indexOf('WebKit') < 0) then document.documentElement else document.body
 
   # ランダムな名前をつける
   createNameRandom = ->
@@ -52,8 +51,9 @@ do (jQuery) ->
       easing = $this.data('cue-easing') or _config.easing
 
       # transitionの設定
-      _css.insertRule(".#{nameClass}{transition: #{property} #{duration} #{easing};}", _indexStyle)
-      _indexStyle++
+      if cssResult isnt ''
+        _css.insertRule(".#{nameClass}{transition: #{property} #{duration} #{easing};}", _indexStyle)
+        _indexStyle++
 
       # transition後の設定
       _css.insertRule(".#{nameClass}.#{_config.classNameCued}{#{cssResult}}", _indexStyle)
@@ -65,12 +65,13 @@ do (jQuery) ->
           delay: $this.data('cue-value') or _config.delay
         _cueing.push itemCueing
       else if 'scroll'
+        targetElementScroll = if (navigator.userAgent.indexOf('WebKit') < 0) then document.documentElement else document.body
         threshold = $this.data('cue-value') or _config.scroll
         timer = false
         $WINDOW.on "scroll.#{nameClass}", ->
           clearTimeout timer if timer
           timer = setTimeout ->
-            if TARGET_ELEMENT_SCROLL.scrollTop > threshold
+            if targetElementScroll.scrollTop > threshold
               $this.addClass _config.classNameCued
               # unbind
               $WINDOW.off ".#{nameClass}"
